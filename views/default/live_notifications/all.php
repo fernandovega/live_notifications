@@ -3,7 +3,8 @@
 		<?php if($notify->from_guid!=$vars['user']->guid): ?>
 			<div class="notifications_content_item_all">
 				<span class="notification_icon_all">
-					<?php echo elgg_view_entity_icon($vars['user'], 'small', array(
+					<?php $from_entity = get_entity($notify->from_guid); ?>
+					<?php echo elgg_view_entity_icon($from_entity, 'small', array(
 														'use_hover' => false,
 														'use_link' => true,
 													)); 

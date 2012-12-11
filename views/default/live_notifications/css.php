@@ -19,6 +19,23 @@
     background: url(<?php echo $vars['url'] ?>mod/live_notifications/graphics/iconh16.png);
  }
 
+<?php if (elgg_is_active_plugin('cool_theme')): ?>
+ .messages-new {
+    background-color: red;
+    border-radius: 10px 10px 10px 10px;
+    box-shadow: -2px 2px 4px rgba(0, 0, 0, 0.5);
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    height: 16px;
+    left: 16px;
+    min-width: 16px;
+    position: absolute;
+    text-align: center;
+    top: 0;
+}
+<?php endif; ?>
+
 #live_notifications{
     float: left; 
     position: absolute; 
