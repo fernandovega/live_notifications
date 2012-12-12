@@ -1,7 +1,5 @@
-<div class="notifications_content">
-<?php if($vars['notifications']): ?>
-	<?php foreach ($vars['notifications'] as $notify): ?>
-		<?php if($notify->from_guid!=$vars['user']->guid): ?>
+<?php if(count($vars['notifications'])>0): ?>
+	<?php foreach ($vars['notifications'] as $notify): ?>		
 			<div class="notifications_content_item">
 				<span class="notification_icon">
 					<?php $from_entity = get_entity($notify->from_guid); ?>
@@ -18,15 +16,16 @@
 						<?php echo elgg_view_friendly_time($notify->time_created) ?>
 					</p>
 				</span>
-				<?php if(!this_notification_is_read($new->guid, $vars['user']->guid)): ?>
-					<?php read_notification($notify->guid, $vars['user']->guid); ?>
+				<?php if($notify->read!=1): ?>
+					<?php 
+					$notify->read = 1;
+					$notify->save();
+					 ?>
 				<?php endif; ?>
 			</div>
-		<?php endif ?>
 	<?php endforeach ?>
 <?php else: ?>
 	<div class="notifications_content_item">
 		<p><?php echo elgg_echo('live_notifications:none'); ?></p>
 	</div>
 <?php endif; ?>
-</div>

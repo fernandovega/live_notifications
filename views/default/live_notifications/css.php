@@ -8,31 +8,30 @@
 /*Live Notifications*/
 
  .elgg-icon-live_notifications{
-    background: url(<?php echo $vars['url'] ?>mod/live_notifications/graphics/icon16.png);
+    background: url(<?php echo $vars['url'] ?>mod/live_notifications/graphics/icon16.png) no-repeat;
  }
 
 .elgg-icon-live_notifications:hover{
-    background: url(<?php echo $vars['url'] ?>mod/live_notifications/graphics/iconh16.png);
+    background: url(<?php echo $vars['url'] ?>mod/live_notifications/graphics/iconh16.png) no-repeat;
  }
 
 .elgg-icon-live_notifications-selected{
-    background: url(<?php echo $vars['url'] ?>mod/live_notifications/graphics/iconh16.png);
+    background: url(<?php echo $vars['url'] ?>mod/live_notifications/graphics/iconh16.png) no-repeat;
  }
+
+ #live_notifications_loader {
+    background-image: url("/_graphics/ajax_loader.gif");
+    background-position: center center;
+    background-repeat: no-repeat;
+    width: 98%;
+    height: 48px;
+    display: none;
+}
 
 <?php if (elgg_is_active_plugin('cool_theme')): ?>
  .messages-new {
-    background-color: red;
-    border-radius: 10px 10px 10px 10px;
-    box-shadow: -2px 2px 4px rgba(0, 0, 0, 0.5);
-    color: white;
-    font-size: 10px;
-    font-weight: bold;
-    height: 16px;
     left: 16px;
     min-width: 16px;
-    position: absolute;
-    text-align: center;
-    top: 0;
 }
 <?php endif; ?>
 
@@ -41,19 +40,21 @@
     position: absolute; 
     background: #FFF; 
     width: 350px; 
-    height: 477px;
-    min-height: 100px; 
+    min-height: 127px; 
+    max-height: 477px;
     margin: 0px 0 0 0px; 
     color: #333;
     border: #C0C0C0 1px solid;
     border-top: 0px;
     z-index:9999;
+    display: none;
 }
 
 #live_notifications_result{
 float:left;
 width: 100%;
-height: 450px; 
+min-height: 100px; 
+max-height: 450px; 
 overflow-y: auto; 
 overflow-x: hidden;
 }

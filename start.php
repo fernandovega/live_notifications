@@ -50,6 +50,9 @@ function live_notifications_page_handler($page) {
 		case 'ajax':			
 			include "$live_notifications_dir/ajax.php";
 			break;
+		case 'pull':			
+			include "$live_notifications_dir/pull.php";
+			break;
 		default:
 			return false;
 	}
@@ -86,8 +89,8 @@ function live_notifications_notifier() {
 		$text = "<span class='$class'></span>";
 		$tooltip = elgg_echo("live_notifications");
 		
-		// get unread messages
-		$num_messages = count_unread_notifications();
+		//get unread messages
+		$num_messages = count_unread_notifications(25);
 
 		$display = "";
 		if ($num_messages == 0) 
@@ -122,6 +125,7 @@ function add_new_notification($to_guid, $from_guid, $type, $entity_guid, $descri
     $notify = new ElggObject();
     $notify->subtype = "notification";
     $notify->access_id = ACCESS_LOGGED_IN;
+    $notify->read = 0;
     $notify->action_type = $entity_type;
     $notify->entity_guid = $entity_guid;
     //User or group notification
@@ -158,35 +162,41 @@ function catch_add_to_river_event($hook, $type, $returnvalue, $params){
 }
 
 function likes_notification_action($hook, $entity_type, $returnvalue, $params){
-	$entity_guid = get_input('guid');
-	$entity = get_entity($entity_guid);
-	
-	$to_guid = $entity->owner_guid;	
-	$from_entity = elgg_get_logged_in_user_entity();
-	$from_guid = $from_entity->guid;
+	if (!elgg_annotation_exists($entity_guid, 'likes')) {
+		include('pages/NovComet.php');
+		$comet = new NovComet();
 
-	if($to_guid!=$from_guid){
-		$url_user = elgg_view('output/url', array(
-					'href' => $from_entity->getURL(),
-					'text' => $from_entity->name,
-					'class' => 'elgg-river-subject',
-				));		
-		$description =  elgg_echo('live_notifications:like', array($url_user, $entity->subtype));
-		if($entity->title!='')
-			$description .= '<a href="'.$entity->getUrl().'" title="">'.$entity->title.'</a>';
+		$entity_guid = get_input('guid');
+		$entity = get_entity($entity_guid);
+		
+		$to_guid = $entity->owner_guid;	
+		$from_entity = elgg_get_logged_in_user_entity();
+		$from_guid = $from_entity->guid;
 
-		add_new_notification($to_guid, $from_guid, 'like', $entity_guid, $description);		
-	}	
+		if($to_guid!=$from_guid){
+			$url_user = elgg_view('output/url', array(
+						'href' => $from_entity->getURL(),
+						'text' => $from_entity->name,
+						'class' => 'elgg-river-subject',
+					));		
+			$description =  elgg_echo('live_notifications:like', array($url_user, $entity->subtype));
+			if($entity->title!='')
+				$description .= '<a href="'.$entity->getUrl().'" title="">'.$entity->title.'</a>';
 
+			add_new_notification($to_guid, $from_guid, 'like', $entity_guid, $description);		
+		}	
+		$comet->publish($to_guid);
+	}
 	return true;
 }
 
 
 function create_message_for_entity($to_entity, $from_entity, $type, $action_type, $entity, $annotation=NULL){
-	
+	include('pages/NovComet.php');
+	$comet = new NovComet();
 
 	if($action_type=='comment'){
-		analize_thread_comments($entity, $annotation, $from_entity);
+		analize_thread_comments($entity, $annotation, $from_entity, $comet);
 		if($from_guid!=$entity->owner_guid){
 			$url_user = elgg_view('output/url', array(
 					'href' => $from_entity->getURL(),
@@ -196,7 +206,8 @@ function create_message_for_entity($to_entity, $from_entity, $type, $action_type
 			$description =  elgg_echo('live_notifications:comments:create', array($url_user, $to_entity->name));
 			$description .= '<a href="'.$entity->getUrl().'" title="">'.$entity->title.'</a> <br/>';
 			$description .= '<i>'.$annotation->value.'</i>';
-			add_new_notification($to_entity->guid, $from_entity->guid, 'comment', $entity->guid, $description);	
+			add_new_notification($to_entity->guid, $from_entity->guid, 'comment', $entity->guid, $description);
+			$comet->publish($to_entity->guid);	
 		}
 	}	
 
@@ -218,12 +229,19 @@ function create_message_for_entity($to_entity, $from_entity, $type, $action_type
 			$description =  elgg_echo('live_notifications:group:create:'.$type, array($url_user, $url_group));
 			$description .= '<a href="'.$entity->getUrl().'" title="">'.$entity->title.'</a>';
 
-			add_new_notification($container->guid, $from_entity->guid, $type, $entity->guid, $description);
+			$members = $container->getMembers();
+			foreach ($members as $member) {
+				# Notify to all members
+				if($from_entity->guid!=$member->guid){
+					add_new_notification($member->guid, $from_entity->guid, $type, $entity->guid, $description);
+					$comet->publish($member->guid);
+				}
+			}
 		}
 	}
 }
 
-function analize_thread_comments($entity, $annotation, $from_entity){
+function analize_thread_comments($entity, $annotation, $from_entity, $comet){
 	$comments = elgg_get_annotations(array(
 		'guid' => $entity->getGUID(),
 		'annotation_name' => 'generic_comment',
@@ -247,7 +265,7 @@ function analize_thread_comments($entity, $annotation, $from_entity){
 				$description .= '<i>'.$annotation->value.'</i>';
 
 				add_new_notification($owner_guid, $from_entity->guid, 'comment', $entity->getGUID(), $description);				
-            	
+            	$comet->publish($owner_guid);	
             	$autors_comments[] = $owner_guid;
             }            
         }
@@ -258,29 +276,11 @@ function get_last_notifications($top=25){
 
 	$user = elgg_get_logged_in_user_entity();
 	if($user){
-		$options = array(
-	        'relationship' => 'member',
-	        'relationship_guid' => $user->getGUID(),
-	        'types' => 'group',
-	        'limit' => 100,
-	    );
-
-
-	    $groups = elgg_get_entities_from_relationship($options);
-	    $to_guid_array = array();
-		$to_guid_array[] = array('name' => 'to_guid', 'value' => $user->guid, 'operand' => '=');
-		
-		foreach ($groups as $group) {			
-        	$to_guid_array[] = array('name' => 'to_guid', 'value' => $group->guid, 'operand' => '=');
-		}
-
 	    $params = array(
 	        'types' => 'object',
 	        'subtype' => 'notification',
-	        // 'metadata_name' => 'to_guid',
-	        //  'metadata_value' => $user->guid,
-	        'metadata_name_value_pairs' => $to_guid_array,
-	        'metadata_name_value_pairs_operator' => 'OR',
+	        'metadata_name' => 'to_guid',
+	        'metadata_value' => $user->guid,
 	        'limit' => $top,
 	    );
 
@@ -290,40 +290,24 @@ function get_last_notifications($top=25){
 
 }
 
-function this_notification_is_read($guid,$user_guid){
-	$read = elgg_annotation_exists($guid,'read_notification',$user_guid);
 
-	return $read;
-}
-
-function read_notification($notify_guid,$user_guid){
-	$annotation = create_annotation($notify_guid,
-												'read_notification',
-												"read_notification",
-												"",
-												$user_guid,
-												ACCESS_PUBLIC);
-
-	return $annotation;
-}
-
-function count_unread_notifications(){
-	$result = 0;
-
+function count_unread_notifications($top=25){
 	$user_guid = elgg_get_logged_in_user_guid();
+	$result = 0;
+	if($user_guid){
+	    $params = array(
+	        'types' => 'object',
+	        'subtype' => 'notification',
+	        'metadata_name_value_pairs' => array(array('name' => 'to_guid', 'value' => $user_guid, 'operand' => '='),
+	        									 array('name' => 'read', 'value' => 0, 'operand' => '=')
+	        									 ),
+	        'metadata_name_value_pairs_operator' => 'AND',
+	        'limit' => $top,
+	        'count' => TRUE
+	    );
 
-	$objects = get_last_notifications(25);
+	    $result = elgg_get_entities_from_metadata($params);    	
+	}
 
-    $sum = 0;
-    if($objects){
-        foreach ($objects as $new) {
-            if($user_guid!= $new->owner_guid){	
-                if (!this_notification_is_read($new->guid,$user_guid))
-                    $sum++;
-            }                    	
-        }
-        $result = $sum;
-    }
-	    
 	return $result;
 }

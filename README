@@ -12,9 +12,7 @@ Este plugin sustituye las notificaciones internas de elgg(site). Este nuevo mode
 - Nuevos "Me gusta" en publicaciones propias.
 - Notificaciones grupales: publicacion de nuevos recursos dentro del grupo.
 
-El notificador de la barra superior se actualiza de forma automatica cada 10 segundos, mostrando en tiempo real cuando hay una nueva notificación.
-
-Respecto a las notificaciones grupales el modelo de almacenamiento soporta grupos grandes. Ejemplo notificar a un grupo de 10,000 usuarios en tiempo real sin sobrecargarse. En el actual modelo de notificaciones de elgg, si tenemos grupos muy grandes y todos sus integrantes tienen integradas las notificaciones internas, el sistema se sobrecarga de tareas y puede producir errores.
+El icono notificador de la barra superior funciona con el modelo comet(por compabilidad con la mayor parte de los servidores y navegadores de clientes), mostrando en tiempo real cuando hay una nueva notificación.
 
 Idiomas: Ingles/Español 
 
@@ -40,9 +38,7 @@ This plugin replaces internal elgg notifications (site). This new model reports 
 - New "Like" in own publications.
 - Notifications Group: Publication of new resources in the group.
 
-The top bar Notifier is updated automatically every 10 seconds, showing in real time when a new notification.
-
-The case of notifications group storage model supports large groups. Example notify a group of 10,000 users in real time without overloading. In the current model elgg notifications, if we have very large groups and all members have integrated internal notifications, the system can work overload and fail.
+The notifier icon in the top bar works with the comet model (for compabilidad with most of the servers and client browsers), showing in real time when a new notification.
 
 Languages​​: English / Spanish
 
