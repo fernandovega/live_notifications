@@ -12,7 +12,7 @@ return array(
 	'live_notifications:group:create:river' => '%s posted a new resource in the %s group ',
 	'live_notifications:group:create:groupforumtopic' => '%s has created a new discussion in the %s group ',
 	'live_notifications:group:discussion:replyowner' => '%s has responded to your topic of discussion %s group ',
-	'live_notifications:group:discussion:reply' => '%s has responded to the discussion %s group:',
+	'live_notifications:group:discussion:reply' => '%s has responded to the discussion group %s:',
 	'live_notifications:like' => '%s like your <a href="%s" title="">post</a> ',
 	'live_notifications:comments:create' => '%s commented in your post ',
 	'live_notifications:comments:thread' => '%s also commented in the <a href="%s" title="">post</a> ',

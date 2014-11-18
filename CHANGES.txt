@@ -1,3 +1,11 @@
+Version 1.9.1 (2014-11-18):
+
+Enhancements:
+	Upgrading to the branch "Elgg 1.9"
+	Ajax alert for new internal messages Elgg.
+	Support for new objects: comments and discussion reply.
+	Some changes in translation.
+
 Version 1.8.5 (2013-08-21):
 
 Bugfixes:	
