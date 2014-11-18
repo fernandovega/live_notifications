@@ -1,48 +1,27 @@
 LIVE NOTIFICATIONS PLUGIN
+
 Fernando Vega Cervantes
 vega.floyd@gmail.com
 https://twitter.com/floydian
 http://community.elgg.org/profile/fvega
 https://github.com/fernandovega
 
-Este plugin esta basado en New Live Notification Comet version 1.6, con la unica diferencia es que este plugin esta basado en Ajax y no en comet. Debido a los problemas de compatibilidad con algunos sever ofrezco esta alternativa.
+This plugin replaces internal elgg notifications for Elgg 1.9
 
-Este plugin sustituye las notificaciones internas de elgg(site). Este nuevo modelo notifica las siguientes acciones:
+Features notifications:
 
-Nuevos comentarios por parte de otros usuarios en cualquier publicación(Entidad) que soporte comentarios.
-Nuevos comentarios de otros usuarios en hilos de discusión de publicacion donde el usuario participa.
-Nuevos "Me gusta" de otros usuarios en publicaciones propias.
-Notificaciones grupales: publicacion de nuevos recursos dentro del grupo.
+- New comments by other users in any publication (supporting new object comment).
+- New user comments in threads of publication where the user participates.
+- Tag user(@username) in some comment.
+- New "Likes".
+- New reply in thread wire
+- Notifications Group: Publication of new resources in the group.
+- Group Discussion Reply: News replies in discussion
 
-El notificador de la barra superior se actualiza de forma automatica cada 15 segundos, actualizando el contador cuando hay una nueva notificación.
+The topbar Live Notification icon is updated automatically every 10 seconds, updating the counter when a new notification.
 
-Idiomas: Ingles/Español 
-
-
-Todas las correcciones y sugerencias son bienvenidas. Espero que les sea de utilidad a la comunidad. Saludos.
-
-Para integrar un nuevo evento de forma manual a este plugin: 
-
-Tan solo es necesario llamar la funcion add_new_notification() con los parametros correspondientes, esta se llamaria por ejemplo en la accion donde se ejecuta el evento deseado.
-
-	add_new_notification($to_user_guid, $from_user_guid, $action_type, $entity_guid, $description);	
-
-Lista de cambios futuros:
-- Cron semanal, para eliminar antiguas notificaciones.
-- Agregar nuevos eventos a notificar: Etiquetado de fotos, Eventos, etc...
-
-*************************************************************************************************************
-
-This plugin is based on New Live Notification Comet version 1.6, with the only difference is that this plugin is based on Ajax and comet. Because of compatibility problems with some sever offer this option.
-
-This plugin replaces internal elgg notifications (site). This new model reports the following:
-
-New comments by other users in any publication (Entity) supporting comments.
-New user comments in threads of publication where the user participates.
-New "Likes".
-Notifications Group: Publication of new resources in the group.
-
-The top bar Notifier is updated automatically every 15 seconds, updating the counter when a new notification.
+New bonus feature:
+The topbar Menssage icon is updated automatically every 15 seconds, updating the counter when a new messages.
 
 Languages​​: English / Spanish
 
@@ -54,7 +33,3 @@ To integrate a new event this plugin manually:
 It is only necessary to call the function add_new_notification() with appropriate parameters, this would be called into elgg action where running the desired event.
 
 	add_new_notification($to_user_guid, $from_user_guid, $action_type, $entity_guid, $description);
-
-List of future changes:
-- Weekly Cron to delete old notifications.
-- Add new events to notify: Tagging photos, events, etc ...
