@@ -8,15 +8,15 @@
 /*Live Notifications*/
 
  .elgg-icon-live_notifications{
-    background: url(<?php echo $vars['url'] ?>mod/live_notifications/graphics/icon16.png) no-repeat;
+    background: url(<?php echo elgg_get_site_url() ?>mod/live_notifications/graphics/icon16.png) no-repeat;
  }
 
 .elgg-icon-live_notifications:hover{
-    background: url(<?php echo $vars['url'] ?>mod/live_notifications/graphics/iconh16.png) no-repeat;
+    background: url(<?php echo elgg_get_site_url() ?>mod/live_notifications/graphics/iconh16.png) no-repeat;
  }
 
 .elgg-icon-live_notifications-selected{
-    background: url(<?php echo $vars['url'] ?>mod/live_notifications/graphics/iconh16.png) no-repeat;
+    background: url(<?php echo elgg_get_site_url() ?>mod/live_notifications/graphics/iconh16.png) no-repeat;
  }
 
  #live_notifications_loader {
@@ -28,35 +28,32 @@
     display: none;
 }
 
-<?php if (elgg_is_active_plugin('cool_theme')): ?>
- .messages-new {
-    left: 16px;
-    min-width: 16px;
-}
-<?php endif; ?>
-
 #live_notifications{
-    float: left; 
-    position: absolute; 
+    /*float: left; 
+    position: absolute; */
     background: #FFF; 
     width: 350px; 
     min-height: 127px; 
     max-height: 477px;
-    margin: 0px 0 0 0px; 
+    margin: 10px 0 0 170px;
     color: #333;
     border: #C0C0C0 1px solid;
     border-top: 0px;
-    z-index:9999;
-    display: none;
+    z-index:9999;    
 }
 
 #live_notifications_result{
 float:left;
 width: 100%;
 min-height: 100px; 
-max-height: 450px; 
+max-height: 350px; 
 overflow-y: auto; 
 overflow-x: hidden;
+}
+
+#live_notifications_result i{
+    color: #909090;
+    font-size: 90%;
 }
 
 #live_notifications_see_more{  
@@ -85,6 +82,10 @@ font-weight: bold;
     border-bottom: 1px solid #C0C0C0;
 }
 
+.new_notification{
+    background: #F4F1C7;
+}
+
 .notifications_content_item_all{
     margin: 5px 0px;
     float: left;
@@ -98,8 +99,9 @@ font-weight: bold;
     float: left;
 }
 .notification_message{
-    width: 290px;
+    width: 275px;
     float: right;
+    padding-right: 15px;
 }
 
 .notification_icon_all{

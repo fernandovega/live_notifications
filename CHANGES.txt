@@ -1,0 +1,25 @@
+Version 1.8.5 (2013-08-21):
+
+Bugfixes:	
+	Corrected Bug with some plugins in the login view (when not being logged) 
+	Corrected bug language file
+	Corrected bugs javascript  and change css style, now use popup elgg style
+
+Enhancements:
+	Added Notification when users is tagging in wire and comments messages, ejem: @admin
+	Compatibility with facebook theme and cooltheme
+
+Version 1.8.0 (2013-01-28):
+
+Bugfixes:
+	Corrected bug when like the wire message
+	Corrected Bug in the login view not being logged
+
+Enhancements:
+	Added Notification for user at the answer to his wire message.
+	Added Notification for user at the answer to his discussion post in the group
+	Changed the data model, probably not old notifications appear
+	Delete icon notification
+	Delete All button
+	﻿Cron to delete old notifications, two weeks ago
+	  

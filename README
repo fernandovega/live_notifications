@@ -5,14 +5,16 @@ https://twitter.com/floydian
 http://community.elgg.org/profile/fvega
 https://github.com/fernandovega
 
+Este plugin esta basado en New Live Notification Comet version 1.6, con la unica diferencia es que este plugin esta basado en Ajax y no en comet. Debido a los problemas de compatibilidad con algunos sever ofrezco esta alternativa.
+
 Este plugin sustituye las notificaciones internas de elgg(site). Este nuevo modelo notifica las siguientes acciones:
 
-- Nuevos comentarios por parte de otros usuarios en cualquier publicación(Entidad) que soporte comentarios.
-- Nuevos comentarios de otros usuarios en hilos de discusión de publicacion donde el usuario participa.
-- Nuevos "Me gusta" en publicaciones propias.
-- Notificaciones grupales: publicacion de nuevos recursos dentro del grupo.
+Nuevos comentarios por parte de otros usuarios en cualquier publicación(Entidad) que soporte comentarios.
+Nuevos comentarios de otros usuarios en hilos de discusión de publicacion donde el usuario participa.
+Nuevos "Me gusta" de otros usuarios en publicaciones propias.
+Notificaciones grupales: publicacion de nuevos recursos dentro del grupo.
 
-El icono notificador de la barra superior funciona con el modelo comet(por compabilidad con la mayor parte de los servidores y navegadores de clientes), mostrando en tiempo real cuando hay una nueva notificación.
+El notificador de la barra superior se actualiza de forma automatica cada 15 segundos, actualizando el contador cuando hay una nueva notificación.
 
 Idiomas: Ingles/Español 
 
@@ -31,14 +33,16 @@ Lista de cambios futuros:
 
 *************************************************************************************************************
 
+This plugin is based on New Live Notification Comet version 1.6, with the only difference is that this plugin is based on Ajax and comet. Because of compatibility problems with some sever offer this option.
+
 This plugin replaces internal elgg notifications (site). This new model reports the following:
 
-- New comments by other users in any publication (Entity) supporting comments.
-- New user comments in threads of publication where the user participates.
-- New "Like" in own publications.
-- Notifications Group: Publication of new resources in the group.
+New comments by other users in any publication (Entity) supporting comments.
+New user comments in threads of publication where the user participates.
+New "Likes".
+Notifications Group: Publication of new resources in the group.
 
-The notifier icon in the top bar works with the comet model (for compabilidad with most of the servers and client browsers), showing in real time when a new notification.
+The top bar Notifier is updated automatically every 15 seconds, updating the counter when a new notification.
 
 Languages​​: English / Spanish
 
