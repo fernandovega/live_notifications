@@ -90,7 +90,6 @@ font-weight: bold;
     margin: 5px 0px;
     float: left;
     width:100%;
-    padding: 5px;
     border-bottom: 1px solid #C0C0C0;
 }
 
@@ -122,4 +121,21 @@ font-weight: bold;
     color:#A2A2A2;
     margin: 5px 20px;
 }
+
+
+ .messages-new {
+    background-color: #ff0000;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 11px;
+    font-weight: bold;
+    height: 19px;
+    left: 26px;
+    line-height: 18px;
+    min-width: 19px;
+    position: absolute;
+    text-align: center;
+    top: 2px;
+}
+
 

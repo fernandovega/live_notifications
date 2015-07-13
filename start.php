@@ -99,17 +99,39 @@ function live_notifications_notifier() {
 		//get unread messages
 		$num_notifications = count_unread_notifications(25);
 
-		$text = elgg_view('live_notifications/topbar_icon',array('num_notifications'=>$num_notifications));
+    if (elgg_is_active_plugin('time_theme') || elgg_is_active_plugin('time_theme_pro')) {
+      $text = '<i class="fa fa-bell fa-lg"></i> ';
 
-		elgg_register_menu_item('topbar', array(
-			'name' => 'notification',
-			'href' => '#live_notifications',			
-			'rel' => 'popup',
-			'text' => $text,
-			'priority' => 600,
-			'title' => $tooltip,
-			'id' => 'live_notifications_link'
-		));
+      if ($num_notifications > 0) {
+        $text .= "<span class=\"elgg-topbar-new\" id=\"count_unread_notifications\">$num_notifications</span>";
+        $tooltip .= ": ".$num_notifications;
+      }
+
+
+      elgg_register_menu_item('topbar', array(
+        'name' => 'notification',
+        'href' => '#live_notifications',      
+        'rel' => 'popup',
+        'text' => $text,
+        'section' => 'alt',
+        'priority' => 250,
+        'title' => $tooltip,
+        'id' => 'live_notifications_link'
+      ));
+
+    }else{
+  		$text = elgg_view('live_notifications/topbar_icon',array('num_notifications'=>$num_notifications));
+
+  		elgg_register_menu_item('topbar', array(
+  			'name' => 'notification',
+  			'href' => '#live_notifications',			
+  			'rel' => 'popup',
+  			'text' => $text,
+  			'priority' => 600,
+  			'title' => $tooltip,
+  			'id' => 'live_notifications_link'
+  		));
+    }
 
 
 	}
@@ -142,24 +164,24 @@ function add_new_notification($to_guid, $from_guid, $type, $entity_guid, $descri
 	return $res;
 }
 
-function catch_add_to_river_event($hook, $type, $returnvalue, $params){
-	$type = $returnvalue["subtype"]; //Subtype object: blog, thewire, bookmark,etc..
-	$action_type = $returnvalue["action_type"]; //Type of action: create, update, comment
-	$entity_guid = $returnvalue["object_guid"];	//Guid of object entity
+function catch_add_to_river_event($hook, $type, $data){
+	$type = $data["subtype"]; //Subtype object: blog, thewire, bookmark,etc..
+	$action_type = $data["action_type"]; //Type of action: create, update, comment
+	$entity_guid = $data["object_guid"];	//Guid of object entity
 	$entity = get_entity($entity_guid);
 	$to_guid = $entity->owner_guid;//Entity creator to notify
 	$to_entity = get_entity($to_guid);
 	$from_entity = elgg_get_logged_in_user_entity();
 
 	//In case of $action_type is "comment" get the annotation 
-	$annotation = elgg_get_annotation_from_id($returnvalue["annotation_id"]);
+	$annotation = elgg_get_annotation_from_id($data["annotation_id"]);
 
 	create_message_for_entity($to_entity, $from_entity, $type, $action_type, $entity, $annotation);
 
-	return true;
+	return $data;
 }
 
-function likes_notification_action($hook, $entity_type, $returnvalue, $params){
+function likes_notification_action($hook, $entity_type, $data){
 	if (!elgg_annotation_exists($entity_guid, 'likes')){
 		$entity_guid = (int) get_input('guid');
 		$entity = get_entity($entity_guid);
@@ -185,10 +207,10 @@ function likes_notification_action($hook, $entity_type, $returnvalue, $params){
 			
 		}	
 	}
-	return true;
+	return $data;
 }
 
-function comment_notification_action($hook, $entity_type, $returnvalue, $params){
+function comment_notification_action($hook, $entity_type, $data){
   $entity_guid = (int) get_input('entity_guid', 0, false);
   $comment_guid = (int) get_input('comment_guid', 0, false);
   $comment_text = get_input('generic_comment');
@@ -213,12 +235,14 @@ function comment_notification_action($hook, $entity_type, $returnvalue, $params)
       $description .= '<i>'.elgg_get_excerpt($comment_text,50).'</i>';
       add_new_notification($to_entity->guid, $from_entity->guid, 'comment', $container->guid, $description);     
     }
-  } 
+  }
+
+  return $data; 
 
 }
 
 //Reply Object in action save event notification
-function reply_notification_action($hook, $entity_type, $returnvalue, $params){
+function reply_notification_action($hook, $entity_type, $data, $params){
   $topic_guid = (int) get_input('topic_guid');
   $text = get_input('description');
   $reply_guid = (int) get_input('guid');
@@ -435,7 +459,7 @@ function get_unread_notifications($top=25){
 /**
  * Remove old notifications
  */
-function live_notifications_cron($hook, $entity_type, $returnvalue, $params) {
+function live_notifications_cron($hook, $entity_type, $data, $params) {
 	// two week ago
 	$time = time() - 60 * 60 * 24 * 14;
 

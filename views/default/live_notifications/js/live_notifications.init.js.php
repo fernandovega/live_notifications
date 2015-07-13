@@ -59,7 +59,7 @@ $(document).ready(function () {
     
                 var num = parseInt($(".elgg-menu-item-messages a span.messages-new").html());
                 if(num_messages>num || num_messages > 0){
-                    text = text + "<span class=\"messages-new\">"+num_messages+"</span>";
+                    text = text + "<span class=\"elgg-topbar-new messages-new\">"+num_messages+"</span>";
                     $(".elgg-menu-item-messages a").html(text);
                     //$(".messages-new").show();
                 }

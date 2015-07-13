@@ -14,9 +14,11 @@ elgg_register_menu_item('title', array(
 	'name' => 'notification-delete-all',
 	'href' => 'action/live_notifications/delete_all',
 	'text' => elgg_echo('live_notifications:delete:all'),
-	'class' => 'elgg-button elgg-button-submit elgg-requires-confirmation',
+	'class' => 'elgg-button elgg-button-submit',
 	'rel'	=> elgg_echo('live_notifications:delete:all:confirm'),
 	'is_action' => true,
+  'title' => elgg_echo('deleteconfirm:plural'),
+  'data-confirm' => elgg_echo('deleteconfirm:plural')
 ));
 
 $content = elgg_view('live_notifications/all', array('user'=>$user, 'notifications'=>$objects));
